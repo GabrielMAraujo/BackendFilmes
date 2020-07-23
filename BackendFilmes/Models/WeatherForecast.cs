@@ -1,6 +1,6 @@
 using System;
 
-namespace BackendFilmes
+namespace BackendFilmes.Models
 {
     public class WeatherForecast
     {
