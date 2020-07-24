@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:7365",
+      "sslPort": 44356
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "weatherforecast",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Config": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "TMDB_API_TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMDlkYjU2ZjhhMjRlODMzZjQ4MTA1NjcxY2U0NzcwYiIsInN1YiI6IjVmMThhMGIzNTE5YmJiMDAzNTZkNjNkMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ToO97Vb3MMHuGXG-2rvZqhZEjFI0URRz9SJDppyoEgY",
+        "TMDB_API_ADDRESS": "https://api.themoviedb.org/3",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5000"
+    }
+  }
+}
