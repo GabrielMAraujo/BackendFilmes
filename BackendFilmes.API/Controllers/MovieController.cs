@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BackendFilmes.Service;
+using BackendFilmes.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,12 +13,12 @@ namespace BackendFilmes.API.Controllers
     [Route("api/[controller]")]
     public class MovieController : Controller
     {
-        private MovieService service = new MovieService();
+        private IMovieService service;
 
-        //public MovieController(MovieService service)
-        //{
-        //    this.service = service;
-        //}
+        public MovieController(IMovieService service)
+        {
+            this.service = service;
+        }
 
 
         // GET: api/values
