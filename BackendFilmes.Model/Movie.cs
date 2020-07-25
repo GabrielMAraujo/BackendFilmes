@@ -10,6 +10,7 @@ namespace BackendFilmes.Model
         //public string Backdrop_path { get; set; }
         public string Title { get; set; }
         public List<int> Genre_ids { get; set; }
+        public List<Genre> Genres { get; set; }
         public string Release_date { get; set; }
     }
 }

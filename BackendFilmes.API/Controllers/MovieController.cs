@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using BackendFilmes.Model;
+using BackendFilmes.Model.DTOs;
 using BackendFilmes.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,18 +18,20 @@ namespace BackendFilmes.API.Controllers
     {
         private IMovieService movieService;
         private IGenreService genreService;
+        private IMapper mapper;
 
-        public MovieController(IMovieService movieService, IGenreService genreService)
+        public MovieController(IMovieService movieService, IGenreService genreService, IMapper mapper)
         {
             this.movieService = movieService;
             this.genreService = genreService;
+            this.mapper = mapper;
         }
 
         // GET /movie
         [HttpGet]
-        public Task<List<Movie>> Get()
+        public ActionResult<List<MovieDTO>> Get()
         {
-            return movieService.RequestLatestMovies();
+            return mapper.Map<List<MovieDTO>>(movieService.RequestLatestMovies().Result);
         }
 
         // GET /movie/genres
