@@ -10,7 +10,7 @@ namespace BackendFilmes.Service
 {
     public class MovieService : IMovieService
     {
-        HttpClient httpClient = new HttpClient();
+        private HttpClient httpClient = new HttpClient();
 
         public MovieService()
         {
@@ -33,9 +33,5 @@ namespace BackendFilmes.Service
             return jsonModel.Results;
         }
 
-        public List<string> GetGenres()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

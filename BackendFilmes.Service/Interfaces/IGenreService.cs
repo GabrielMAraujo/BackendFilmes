@@ -5,8 +5,9 @@ using BackendFilmes.Model;
 
 namespace BackendFilmes.Service.Interfaces
 {
-    public interface IMovieService
+    public interface IGenreService
     {
-        public Task<List<Movie>> RequestLatestMovies();
+        public Task<List<Genre>> GetGenres(List<int> genresIdList);
+        public Task<List<Genre>> GetAllGenresList();
     }
 }

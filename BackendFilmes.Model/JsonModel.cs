@@ -9,4 +9,10 @@ namespace BackendFilmes.Model
         [JsonProperty("results")]
         public List<Movie> Results { get; set; }
     }
+
+    public class GenreJsonModel
+    {
+        [JsonProperty("genres")]
+        public List<Genre> Genres { get; set; }
+    }
 }

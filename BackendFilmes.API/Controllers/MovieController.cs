@@ -14,19 +14,28 @@ namespace BackendFilmes.API.Controllers
     [Route("api/[controller]")]
     public class MovieController : Controller
     {
-        private IMovieService service;
+        private IMovieService movieService;
+        private IGenreService genreService;
 
-        public MovieController(IMovieService service)
+        public MovieController(IMovieService movieService, IGenreService genreService)
         {
-            this.service = service;
+            this.movieService = movieService;
+            this.genreService = genreService;
         }
 
         // GET /movie
         [HttpGet]
         public Task<List<Movie>> Get()
         {
-            return service.RequestLatestMovies();
+            return movieService.RequestLatestMovies();
         }
 
+        // GET /movie/genres
+        [HttpGet("genres")]
+        public Task<List<Genre>> GetGenres()
+        {
+            //return genreService.GetAllGenresList();
+            return genreService.GetGenres(new List<int> { 28, 35, 878, 10751 });
+        }
     }
 }
