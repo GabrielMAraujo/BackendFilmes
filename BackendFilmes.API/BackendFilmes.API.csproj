@@ -8,13 +8,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BackendFIlmes.Model\BackendFIlmes.Model.csproj">
+    <ProjectReference Include="..\BackendFilmes.Service\BackendFilmes.Service.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\BackendFilmes.Service\BackendFilmes.Service.csproj">
+    <ProjectReference Include="..\BackendFilmes.Model\BackendFilmes.Model.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
