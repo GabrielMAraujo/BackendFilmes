@@ -23,8 +23,11 @@ namespace BackendFilmes.Service
         //Returns a genre list from a genre ID list
         public async Task<List<Genre>> GetGenres(List<int> genresIdList)
         {
+            if (genresIdList == null)
+                return null;
+
             //Guarantees that genreList is updated
-            await GetAllGenresList();
+            genreList = await GetAllGenresList();
 
             //Gets filtered list with only genres that are in the ID list
             List<Genre> filteredList = genreList.Where(g => genresIdList.Contains(g.Id)).ToList();
@@ -46,10 +49,13 @@ namespace BackendFilmes.Service
                 //Deserializing response in model object
                 GenreJsonModel genreJsonModel = await response.Content.ReadAsAsync<GenreJsonModel>();
 
-                genreList = genreJsonModel.Genres;
+                return genreJsonModel.Genres;
             }
 
-            return genreList;
+            else
+            {
+                return genreList;
+            }
         }
     }
 }

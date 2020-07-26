@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendFilmes.API", "Backen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendFilmes.Model", "BackendFilmes.Model\BackendFilmes.Model.csproj", "{BE7CFF5C-AF9F-4E51-9EFD-41148AE0E629}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendFilmes.Test", "BackendFilmes.Test\BackendFilmes.Test.csproj", "{F572F651-46CD-4EBF-8B61-F2F7C9DE7608}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,5 +27,9 @@ Global
 		{BE7CFF5C-AF9F-4E51-9EFD-41148AE0E629}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE7CFF5C-AF9F-4E51-9EFD-41148AE0E629}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE7CFF5C-AF9F-4E51-9EFD-41148AE0E629}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F572F651-46CD-4EBF-8B61-F2F7C9DE7608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F572F651-46CD-4EBF-8B61-F2F7C9DE7608}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F572F651-46CD-4EBF-8B61-F2F7C9DE7608}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F572F651-46CD-4EBF-8B61-F2F7C9DE7608}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
