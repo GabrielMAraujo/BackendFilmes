@@ -4,11 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BackendFilmes.Model;
-using BackendFilmes.Model.DTOs;
 using BackendFilmes.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BackendFilmes.API.Controllers
 {
@@ -29,17 +26,15 @@ namespace BackendFilmes.API.Controllers
 
         // GET /movie
         [HttpGet]
-        public ActionResult<List<MovieDTO>> Get()
+        //public ActionResult<List<Movie>> Get(string additionalParams)
+        public ActionResult<string> Get(string additionalParams)
         {
-            return mapper.Map<List<MovieDTO>>(movieService.RequestLatestMovies().Result);
+            List<string> paramsList = movieService.ParseAdditionalParams(additionalParams);
+
+            List<Movie> movies = movieService.RequestLatestMovies().Result;
+
+            return Content(movieService.MakeJsonWithAdditionalFields(movies, paramsList), "application/json");
         }
 
-        // GET /movie/genres
-        [HttpGet("genres")]
-        public Task<List<Genre>> GetGenres()
-        {
-            //return genreService.GetAllGenresList();
-            return genreService.GetGenres(new List<int> { 28, 35, 878, 10751 });
-        }
     }
 }
