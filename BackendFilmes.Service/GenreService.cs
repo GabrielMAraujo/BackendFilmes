@@ -36,7 +36,7 @@ namespace BackendFilmes.Service
         }
 
         //Returns all movie genres from TMDB API. If it was already requested, return previously requested genres list.
-        public async Task<List<Genre>> GetAllGenresList()
+        private async Task<List<Genre>> GetAllGenresList()
         {
             if (genreList == null)
             {

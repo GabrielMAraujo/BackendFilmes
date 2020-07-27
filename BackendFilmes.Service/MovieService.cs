@@ -30,8 +30,7 @@ namespace BackendFilmes.Service
         }
 
         //This function requests a page the latest movies from TMDB API and returns an array of Movie objects of them
-        public async Task RequestLatestMovies(int? page)
-        //public async Task<List<Movie>> RequestLatestMovies(int? page)
+        private async Task RequestLatestMovies(int? page)
         {
             page ??= 1;
 
@@ -78,8 +77,6 @@ namespace BackendFilmes.Service
             allMoviesList.AddRange(jsonModel.Results);
 
             Console.WriteLine("Request TMDB API - Page " + page.Value);
-
-            //return jsonModel.Results;
         }
 
         //Parses a comma-separated string array of additional parameters to a list of strings
@@ -113,7 +110,7 @@ namespace BackendFilmes.Service
         }
 
         //Takes the attributes that are not default or additional and nulls them out (for JSON to ignore them)
-        public void NullifyUnwantedAttributes(List<Movie> movieList, List<string> additionalParametersList)
+        private void NullifyUnwantedAttributes(List<Movie> movieList, List<string> additionalParametersList)
         {
             //Using Reflection to get a list of all property names
             var properties = typeof(Movie).GetProperties().Select(p => p.Name).ToList();
@@ -143,7 +140,7 @@ namespace BackendFilmes.Service
         }
 
         //Capitalizes first letter of string. Used to match lower-case query properties to model property names.
-        public string CapitalizeString(string str)
+        private string CapitalizeString(string str)
         {
             return char.ToUpper(str.First()) + str.Substring(1).ToLower();
         }
@@ -210,7 +207,7 @@ namespace BackendFilmes.Service
         }
 
         //Deep clones a movie list
-        public List<Movie> DeepClone(List<Movie> list)
+        private List<Movie> DeepClone(List<Movie> list)
         {
             return list.ConvertAll(movie => new Movie(movie.Title, movie.Genres, movie.Release_date, movie.Genre_ids, movie.Popularity, movie.Vote_count, movie.Video, movie.Poster_path, movie.Id, movie.Adult, movie.Backdrop_path, movie.Original_language, movie.Original_title, movie.Vote_average, movie.Overview));
         }

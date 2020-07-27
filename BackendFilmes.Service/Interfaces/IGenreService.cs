@@ -8,6 +8,6 @@ namespace BackendFilmes.Service.Interfaces
     public interface IGenreService
     {
         public Task<List<Genre>> GetGenres(List<int> genresIdList);
-        public Task<List<Genre>> GetAllGenresList();
+        //public Task<List<Genre>> GetAllGenresList();
     }
 }
