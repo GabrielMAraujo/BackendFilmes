@@ -68,7 +68,7 @@ namespace BackendFilmes.Service
             //Updating number of total pages, total items and current page(if necessary)
             totalPages = jsonModel.Total_pages;
             totalItems = jsonModel.Total_results.Value;
-            Console.WriteLine("pv"+ page.Value);
+
             if(page.Value > currentHigherPage)
             {
                 currentHigherPage = page.Value;
@@ -196,13 +196,22 @@ namespace BackendFilmes.Service
             else
             {
                 List<Movie> pageMovies = allMoviesList.GetRange(startItem, range);
-                return pageMovies;
+
+                //Deep cloning list for return without references
+                return DeepClone(pageMovies);
             }
         }
 
+        //Calculates and returns the total number of pages according to page size
         public int GetTotalPages(int pageSize)
         {
             return (int)Math.Ceiling((float)totalItems / pageSize);
+        }
+
+        //Deep clones a movie list
+        public List<Movie> DeepClone(List<Movie> list)
+        {
+            return list.ConvertAll(movie => new Movie(movie.Title, movie.Genres, movie.Release_date, movie.Genre_ids, movie.Popularity, movie.Vote_count, movie.Video, movie.Poster_path, movie.Id, movie.Adult, movie.Backdrop_path, movie.Original_language, movie.Original_title, movie.Vote_average, movie.Overview));
         }
     }
 }

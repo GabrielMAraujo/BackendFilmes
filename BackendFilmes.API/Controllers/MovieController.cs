@@ -38,6 +38,7 @@ namespace BackendFilmes.API.Controllers
             pageSize ??= int.Parse(Environment.GetEnvironmentVariable("DEFAULT_PAGE_SIZE"));
 
             List<Movie> movies = movieService.GetMoviePage(page.Value, pageSize.Value).Result;
+            
 
             if(movies == null)
             {
