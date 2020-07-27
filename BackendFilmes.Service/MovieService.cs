@@ -16,6 +16,11 @@ namespace BackendFilmes.Service
         private HttpClient httpClient = new HttpClient();
         private IGenreService genreService;
 
+        private static List<Movie> allMoviesList = new List<Movie>();
+        private static int currentHigherPage = 0;
+        private static int totalPages = 0;
+        private static int totalItems = 0;
+
         public MovieService(IGenreService genreService)
         {
             this.genreService = genreService;
@@ -24,11 +29,29 @@ namespace BackendFilmes.Service
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("TMDB_API_TOKEN"));
         }
 
-        //This function requests the latest movies from TMBD API and returns an array of Movie objects of them
-        public async Task<List<Movie>> RequestLatestMovies()
+        //This function requests a page the latest movies from TMDB API and returns an array of Movie objects of them
+        public async Task RequestLatestMovies(int? page)
+        //public async Task<List<Movie>> RequestLatestMovies(int? page)
         {
+            page ??= 1;
+
+            //Invalid page verification
+            if (page.Value < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            //Page skip verification
+            if(page.Value - currentHigherPage != 1)
+            {
+                throw new ArgumentException();
+            }
+
+            //Query for page
+            string query = "?page=" + page.Value;
+
             //TMDB latest movies' API route path 
-            string path = Environment.GetEnvironmentVariable("TMDB_API_ADDRESS") + "/movie/upcoming";
+            string path = Environment.GetEnvironmentVariable("TMDB_API_ADDRESS") + "/movie/upcoming" + query;
 
             //Sending request to route and getting the response asynchronously
             HttpResponseMessage response = await httpClient.GetAsync(path);
@@ -42,8 +65,21 @@ namespace BackendFilmes.Service
                 movie.Genres = await genreService.GetGenres(movie.Genre_ids);
             }
 
+            //Updating number of total pages, total items and current page(if necessary)
+            totalPages = jsonModel.Total_pages;
+            totalItems = jsonModel.Total_results.Value;
+            Console.WriteLine("pv"+ page.Value);
+            if(page.Value > currentHigherPage)
+            {
+                currentHigherPage = page.Value;
+            }
 
-            return jsonModel.Results;
+            //Append results in already existing list
+            allMoviesList.AddRange(jsonModel.Results);
+
+            Console.WriteLine("Request TMDB API - Page " + page.Value);
+
+            //return jsonModel.Results;
         }
 
         //Parses a comma-separated string array of additional parameters to a list of strings
@@ -59,7 +95,7 @@ namespace BackendFilmes.Service
 
 
         //Makes JSON with default return fields and passed additional fields
-        public string MakeJsonWithAdditionalFields(List<Movie> moviesList, List<string> additionalParametersList)
+        public string MakeJsonWithAdditionalFields(List<Movie> moviesList, List<string> additionalParametersList, int page, int totalPages)
         {
             NullifyUnwantedAttributes(moviesList, additionalParametersList);
 
@@ -70,7 +106,10 @@ namespace BackendFilmes.Service
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
-            return JsonSerializer.Serialize<List<Movie>>(moviesList, options);
+            //Creating JsonModel object for correct JSON formatting
+            JsonModel model = new JsonModel(moviesList, page, totalPages);
+
+            return JsonSerializer.Serialize(model, options);
         }
 
         //Takes the attributes that are not default or additional and nulls them out (for JSON to ignore them)
@@ -108,5 +147,62 @@ namespace BackendFilmes.Service
             return char.ToUpper(str.First()) + str.Substring(1).ToLower();
         }
 
+        //Returns a movie list corresponding to the selected page with selected size
+        public async Task<List<Movie>> GetMoviePage(int? page, int? pageSize)
+        {
+            //Bad parameter verification
+            if (page <= 0 || pageSize <= 0)
+            {
+                return null;
+            }
+
+            //Calculating to see in which API page (which has size 20) the data window ends
+            int endItem = page.Value * pageSize.Value;
+            int endPage = (int)Math.Ceiling((float)endItem / 20);
+
+            //Get movies equivalent to the page
+            int startItem = (page.Value - 1) * pageSize.Value;
+
+            int range = pageSize.Value;
+
+            //If end page is greater that current requested higher page, request the next needed pages
+            if(endPage > currentHigherPage)
+            {
+                for(int i = currentHigherPage + 1; i <= endPage; i++)
+                {
+                    //Total page overflow
+                    if(totalPages != 0 && i > totalPages)
+                    {
+                        break;
+                    }
+                    await RequestLatestMovies(i);
+                }
+            }
+
+            //Last page verification
+            if (endPage >= totalPages)
+            {
+                endPage = totalPages;
+                endItem = totalItems;
+                range = endItem - startItem;
+            }
+
+            //Start overflow verification
+            if (startItem > endItem)
+            {
+                return new List<Movie>();
+            }
+
+            else
+            {
+                List<Movie> pageMovies = allMoviesList.GetRange(startItem, range);
+                return pageMovies;
+            }
+        }
+
+        public int GetTotalPages(int pageSize)
+        {
+            return (int)Math.Ceiling((float)totalItems / pageSize);
+        }
     }
 }

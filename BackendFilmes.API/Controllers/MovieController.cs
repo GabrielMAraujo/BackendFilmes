@@ -27,13 +27,26 @@ namespace BackendFilmes.API.Controllers
         // GET /movie
         [HttpGet]
         //public ActionResult<List<Movie>> Get(string additionalParams)
-        public ActionResult<string> Get(string additionalParams)
+        public ActionResult<string> Get(string additionalParams, int? page, int? pageSize)
         {
             List<string> paramsList = movieService.ParseAdditionalParams(additionalParams);
 
-            List<Movie> movies = movieService.RequestLatestMovies().Result;
+            //List<Movie> movies = movieService.RequestLatestMovies(page).Result;
 
-            return Content(movieService.MakeJsonWithAdditionalFields(movies, paramsList), "application/json");
+            //Setting default page and page size values
+            page ??= 1;
+            pageSize ??= int.Parse(Environment.GetEnvironmentVariable("DEFAULT_PAGE_SIZE"));
+
+            List<Movie> movies = movieService.GetMoviePage(page.Value, pageSize.Value).Result;
+
+            if(movies == null)
+            {
+                return BadRequest();
+            }
+
+            string json = movieService.MakeJsonWithAdditionalFields(movies, paramsList, page.Value, movieService.GetTotalPages(pageSize.Value));
+
+            return Content(json, "application/json");
         }
 
     }
