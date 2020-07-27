@@ -29,7 +29,7 @@ namespace BackendFilmes.Service
         }
 
         //Takes the attributes that are not default or additional and nulls them out (for JSON to ignore them)
-        private void NullifyUnwantedAttributes(List<Movie> movieList, List<string> additionalParametersList)
+        public void NullifyUnwantedAttributes(List<Movie> movieList, List<string> additionalParametersList)
         {
             //Using Reflection to get a list of all property names
             var properties = typeof(Movie).GetProperties().Select(p => p.Name).ToList();
@@ -60,8 +60,14 @@ namespace BackendFilmes.Service
         }
 
         //Capitalizes first letter of string. Used to match lower-case query properties to model property names.
-        private string CapitalizeString(string str)
+        public string CapitalizeString(string str)
         {
+            if (str == null)
+                return null;
+
+            if(str.Length < 1)
+                return "";
+
             return char.ToUpper(str.First()) + str.Substring(1).ToLower();
         }
     }
