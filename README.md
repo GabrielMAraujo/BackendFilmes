@@ -2,7 +2,7 @@ README - Backend Filmes
 
 -Descrição
 
-O backend possui apenas uma rota: GET /api/movie. Esta rota retorna os filmes a serem lançados no cinema de acordo com a API do TheMovieDB. Os dados são retornados via JSON, com paginação dos resultados. Além dos filmes, a rota também retorna dois dados de paginação: page (página atual) e total_pages (número total de páginas).
+	O backend possui apenas uma rota: GET /api/movie. Esta rota retorna os filmes a serem lançados no cinema de acordo com a API do TheMovieDB. Os dados são retornados via JSON, com paginação dos resultados. Além dos filmes, a rota também retorna dois dados de paginação: page (página atual) e total_pages (número total de páginas).
 
 -Parâmetros de query
 
@@ -50,13 +50,31 @@ O backend possui apenas uma rota: GET /api/movie. Esta rota retorna os filmes a 
 
 -Exemplo de chamada da rota
 
-Passando parâmetros adicionais id e overview, página 2 e tamanho de página 5
+	Passando parâmetros adicionais id e overview, página 2 e tamanho de página 5
 
-http://localhost:5000/api/movie?additionalParams=id,overview&page=2&pageSize=5
+	http://localhost:5000/api/movie?additionalParams=id,overview&page=2&pageSize=5
 
 
 -Padrões utilizados
 
--Bibliotecas externas
+	O projeto tem o padrão estrutural baseado no Facade, de forma que a única parte do projeto que pode ser acessada externamente são as Controllers, contidas no projeto BackendFilmes.API . Além disso, toda a parte de regra de negócio está completamente separada das Controllers, e contida somente no projeto BackendFilmes.Service.
+	Além disso, é possível perceber que a arquitetura da API também implementa a separação em camadas (API, Service, Model e Test), onde cada camada possui uma função bem definida e distinta das outras camadas, o que reforça a utilização do princípio de responsabilidade única nas funções implementadas.
+	Outro princípio muito utilizado no projeto é a injeção de dependência, que é utilizado para exibir os serviços para a camada API por meio de interfaces implementadas.
+
+-Dependências
+
+	O projeto utiliza algumas dependências externas. Serão listadas abaixo algumas das dependências e o motivo de sua utilização:
+
+		Web API: criação das controllers e endereçamento das rotas
+
+		Newtonsoft.JSON: serialização das classes de modelo para JSON e customização do JSON para envio na resposta
+
+		Reflection: obtenção de propriedades de um objeto genérico e modificação do valor destas propriedades
+
+		Linq: operações sobre listas de objetos
 
 -Detalhes relevantes
+
+	Por possuir requisições a outra API, a aplicação foi construída de forma a minimizar este número de requisições ao máximo. A solução encrontrada foi a seguinte: a aplicação guarda alguns dados da requisição, como o número total de páginas da API e as páginas que já foram requisitadas. Além disso, os dados dos filmes requisitados ficam guardados em um lista.
+	Quando a API requisita uma quantidade de dados de filmes, é primeiro checado se estes dados já existem localmente. Se não existem, são feitas requisições à API do TMDB (função RequestLatestMovies) pedindo as páginas necessárias (lembrando que o tamanho de página desta API é fixo, de valor 20).
+	Uma vez que os dados necessários existam localmente, o código faz um cálculo do tamanho de página e número da página requisitados, e por fim extrai os dados pedidos e os exporta em uma lista (função GetMoviePage).

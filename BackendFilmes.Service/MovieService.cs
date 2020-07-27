@@ -135,6 +135,7 @@ namespace BackendFilmes.Service
             {
                 foreach (var prop in properties)
                 {
+                    //Using Reflection to nullify the list's attributes
                     var property = movie.GetType().GetProperty(prop);
                     property.SetValue(movie, null, null);
                 }
