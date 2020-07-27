@@ -11,10 +11,12 @@ namespace BackendFilmes.API.Controllers
     public class MovieController : Controller
     {
         private IMovieService movieService;
+        private IJsonService jsonService;
 
-        public MovieController(IMovieService movieService)
+        public MovieController(IMovieService movieService, IJsonService jsonService)
         {
             this.movieService = movieService;
+            this.jsonService = jsonService;
         }
 
         // GET /movie
@@ -35,7 +37,7 @@ namespace BackendFilmes.API.Controllers
                 return BadRequest();
             }
 
-            string json = movieService.MakeJsonWithAdditionalFields(movies, paramsList, page.Value, movieService.GetTotalPages(pageSize.Value));
+            string json = jsonService.MakeJsonWithAdditionalFields(movies, paramsList, page.Value, movieService.GetTotalPages(pageSize.Value));
 
             return Content(json, "application/json");
         }

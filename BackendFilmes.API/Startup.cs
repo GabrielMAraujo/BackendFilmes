@@ -24,6 +24,7 @@ namespace BackendFilmes
             services.AddMvc();
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IGenreService, GenreService>();
+            services.AddScoped<IJsonService, JsonService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
